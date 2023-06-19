@@ -1,0 +1,12 @@
+.add-pizza-form{
+    display: flex;    
+    justify-content: center;
+    
+    
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;    
+    
+}
