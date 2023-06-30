@@ -13,8 +13,17 @@ const AddPizza = () => {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+    //Retrieve the Jwt token from storage mechanism
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    //Create a new instance of axios with custom headers
+    const axiosInstance = axios.create({
+      headers: {
+        Authorization: `Bearer ${user}`,
+      },
+    });
     try {
-      await axios.post(`https://localhost:7098/Api/Pizza/AddPizza`, {
+      await axiosInstance.post(`https://localhost:7098/Api/Pizza/AddPizza`, {
         name,
         sizeID,
         description,

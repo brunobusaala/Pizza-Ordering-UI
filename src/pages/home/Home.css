@@ -1,6 +1,7 @@
 .pizza-card {
   display: grid;
   grid-template-columns: repeat(4, 223px);
+  justify-content: center;
   gap: 10px;
 }
 .pizza-card img {
@@ -17,4 +18,12 @@
 }
 .btn {
   width: 100%;
+}
+.submit-status{
+  justify-content: center;
+  display: flex;  
+}
+.submitdiv{
+  height: 4vh;
+  margin: 2vh;
 }

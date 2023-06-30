@@ -1,0 +1,23 @@
+.cart-card {
+  display: flex;  
+  
+  border-bottom: 1px solid #e0e0e0;
+  width: 50%;
+}
+.cart-details {
+  display: flex;
+  flex-direction: column; 
+  padding-left: 10px; 
+}
+.cart-item img {
+  width: 100px;
+  height: 100px;
+}
+.cart-item{
+  display: flex; 
+  justify-content: center;
+}
+.cartItems h2{
+margin-bottom: 30px;
+margin-top: 20px;
+}
