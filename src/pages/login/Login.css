@@ -1,0 +1,9 @@
+.my-form{    
+    display: flex;
+    justify-content: center;
+    align-items:center;  
+    
+}
+.btn{
+    margin-top: 10px;
+}
