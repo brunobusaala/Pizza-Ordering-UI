@@ -13,9 +13,8 @@ import EditPizza from "../../pages/editpizza/EditPizza";
 import axios from "axios";
 import Login from "../../pages/login/Login";
 
-
 // Set the base URL for all requests
-axios.defaults.baseURL = "https://localhost:7098";
+axios.defaults.baseURL = "https://localhost:44320";
 
 // Add an interceptor to attach the JWT token to the request headers
 // axios.interceptors.request.use(
@@ -32,7 +31,7 @@ axios.defaults.baseURL = "https://localhost:7098";
 // );
 
 const App = () => {
-  let [pizza, setPizza] = useState([]);  
+  let [pizza, setPizza] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   //let [cart, setCart] = useState([]);
 
@@ -63,7 +62,6 @@ const App = () => {
   //     setPizza(res.data);
   //   });
   // }, []);
-  
 
   return (
     <div>

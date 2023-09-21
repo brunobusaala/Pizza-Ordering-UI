@@ -1,9 +1,26 @@
 .pizza-card {
   display: grid;
-  grid-template-columns: repeat(4, 223px);
+  grid-template-columns: repeat(6, 250px);
   justify-content: center;
-  gap: 10px;
+  gap: 20px;
 }
+@media (max-width: 1200px) {
+  .pizza-card {
+    grid-template-columns: repeat(4, 250px);
+  }
+}
+@media (max-width: 900px) {
+  .pizza-card {
+    grid-template-columns: repeat(3, 250px);
+  }
+}
+
+@media (max-width: 600px) {
+  .pizza-card {
+    grid-template-columns: repeat(2, 250px);
+  }
+}
+
 .pizza-card img {
   width: 100%;
   object-fit: cover;
@@ -19,11 +36,11 @@
 .btn {
   width: 100%;
 }
-.submit-status{
+.submit-status {
   justify-content: center;
-  display: flex;  
+  display: flex;
 }
-.submitdiv{
+.submitdiv {
   height: 4vh;
   margin: 2vh;
 }

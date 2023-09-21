@@ -21,25 +21,29 @@ const Header = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">PizzaMtaani</Link>
+        <Link to="/">
+          Pizza<span style={{ color: "red" }}>Mtaani</span>
+        </Link>
       </div>
-      <div className="nav-items">
+      <div className="nav-items align-items-center">
         {isLoggedIn ? (
           <>
             <div className="nav-item">
               <Link to="/cart">Cart</Link>
             </div>
-            <div className="nav-item">
+            {/* <div className="nav-item">
               <Link to="/contact">Contacts</Link>
-            </div>
-            <div className="nav-item">
+            </div> */}
+            {/* <div className="nav-item">
               <Link to="/addpizza">Add</Link>
-            </div>
-            <div className="nav-item">
+            </div> */}
+            {/* <div className="nav-item">
               <Link to="/deletepizza">Delete</Link>
-            </div>
-            <div className="nav-item">
-              <button onClick={handleLogout}>Logout</button>
+            </div> */}
+            <div className="nav-items">
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
             </div>
           </>
         ) : (

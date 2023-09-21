@@ -24,9 +24,6 @@ const Login = (props) => {
     if (!password) {
       validationErrors.password = "Password is required";
     }
-    if (!email) {
-      validationErrors.email = "Email is required";
-    }
 
     // Set the errors state and return if there are validation errors
     if (Object.keys(validationErrors).length > 0) {
@@ -37,7 +34,6 @@ const Login = (props) => {
     try {
       const response = await axios.post("/api/token/Login", {
         userName,
-        email,
         password,
         rememberMe,
       });
@@ -45,7 +41,9 @@ const Login = (props) => {
       if (response.data) {
         localStorage.setItem("user", JSON.stringify(response.data));
 
-        navigate("/");//Redirect to home page
+        navigate("/"); //Redirect to home page
+      } else {
+        setErrors({ invalidCredentials: "Invalid Credentials" });
       }
       return response.data;
     } catch (error) {
@@ -59,7 +57,7 @@ const Login = (props) => {
         <h2 className="text-center">Login Page</h2>
         <Form>
           <Form.Group>
-            <Form.Label>Enter Your UserName:</Form.Label>
+            <Form.Label className="mt-3">Enter Your UserName:</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter your userName"
@@ -73,22 +71,9 @@ const Login = (props) => {
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label htmlFor="email">Enter Email:</Form.Label>
-            <Form.Control
-              name="email"
-              type="email"
-              placeholder="@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              isInvalid={!!errors.email} // Set the isInvalid prop based on the validation error
-            />
-            <Form.Control.Feedback type="invalid">
-              {" "}
-              {errors.email}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label htmlFor="password">Enter Password:</Form.Label>
+            <Form.Label className="mt-3" htmlFor="password">
+              Enter Password:
+            </Form.Label>
             <Form.Control
               name="password"
               type="password"
@@ -102,7 +87,7 @@ const Login = (props) => {
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="mt-3">
             <Form.Check
               type="checkbox"
               label="Remember Me"

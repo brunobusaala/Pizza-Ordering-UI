@@ -23,7 +23,7 @@ const AddPizza = () => {
       },
     });
     try {
-      await axiosInstance.post(`https://localhost:7098/Api/Pizza/AddPizza`, {
+      await axiosInstance.post(`https://localhost:44320/Api/Pizza/AddPizza`, {
         name,
         sizeID,
         description,
@@ -32,32 +32,32 @@ const AddPizza = () => {
       });
       setSubmissionStatus("success");
       setTimeout(() => {
-        setSubmissionStatus("")
+        setSubmissionStatus("");
       }, 3000);
-      
     } catch (error) {
       console.error("Failed to Submit due to submission error!");
       setSubmissionStatus("fail");
       setTimeout(() => {
-        setSubmissionStatus("")
+        setSubmissionStatus("");
       }, 3000);
     }
   };
 
   return (
     <div className="add-pizza-form">
-      
-
       <Form className="form">
-      <div>
-        {submissionStatus === "success" && (
-          <Alert variant="success">You have Successfully added a Pizza!</Alert>
-        )}
-        {
-            submissionStatus==="fail"&&
-            <Alert variant="danger">You encountered an error while trying to submit!</Alert>
-        }
-      </div>
+        <div>
+          {submissionStatus === "success" && (
+            <Alert variant="success">
+              You have Successfully added a Pizza!
+            </Alert>
+          )}
+          {submissionStatus === "fail" && (
+            <Alert variant="danger">
+              You encountered an error while trying to submit!
+            </Alert>
+          )}
+        </div>
         <Form.Group className="mb-3">
           <Form.Label>Enter name of Pizza:</Form.Label>
           <Form.Control

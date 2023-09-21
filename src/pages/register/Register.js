@@ -47,7 +47,7 @@ const Register = () => {
 
     // Perform API call
     axios
-      .post("/api/token/register", {
+      .post("/api/token/Register", {
         username,
         email,
         password,
@@ -55,7 +55,6 @@ const Register = () => {
       })
       .then((response) => {
         // Handle the response
-        console.log("Registration successful!", response.data);
         setSubmitStatus("Registration successful!");
         setTimeout(() => {
           setSubmitStatus("");

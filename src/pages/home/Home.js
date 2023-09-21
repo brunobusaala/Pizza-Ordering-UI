@@ -10,6 +10,9 @@ const Home = (props) => {
 
   const handleCart = (productId) => {
     //Retrieve the Jwt token from storage mechanism
+    if (!localStorage.getItem("user")) {
+      window.location.href = "/login";
+    }
     const user = JSON.parse(localStorage.getItem("user"));
 
     //Create a new instance of axios with custom headers
@@ -20,12 +23,14 @@ const Home = (props) => {
     });
     try {
       // axios.post(`/Api/Cart/AddItemToCart${productId}`).then((response) => {
-        axiosInstance.post(`/Api/Cart/AddItemToCart/${productId}`).then((response) => {
-        setSubmitStatus(true);
-        setTimeout(() => {
-          setSubmitStatus("");
-        }, 3000);
-      });
+      axiosInstance
+        .post(`/Api/Cart/AddItemToCart/${productId}`)
+        .then((response) => {
+          setSubmitStatus(true);
+          setTimeout(() => {
+            setSubmitStatus("");
+          }, 3000);
+        });
     } catch (error) {
       setSubmitStatus(false);
       setTimeout(() => {
@@ -40,7 +45,7 @@ const Home = (props) => {
       <div className="submit-status">
         <div className="submitdiv">
           {submitStatus === true && (
-            <Alert variant="success">Added to Cart Succesffully!</Alert>
+            <Alert variant="success">Added to Cart Succesfully!</Alert>
           )}
           {submitStatus === false && (
             <Alert variant="danger">Something went wrong!</Alert>

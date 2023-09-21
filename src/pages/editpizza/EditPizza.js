@@ -14,13 +14,16 @@ const EditPizza = () => {
     let { pizza } = props;
     e.preventDefault();
     try {
-      await axios.put(`https://localhost:7098/Api/Pizza/EditPizza${pizza.id}`, {
-        name,
-        sizeID,
-        description,
-        price,
-        imageName,
-      });
+      await axios.put(
+        `https://localhost:44320/Api/Pizza/EditPizza${pizza.id}`,
+        {
+          name,
+          sizeID,
+          description,
+          price,
+          imageName,
+        }
+      );
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
