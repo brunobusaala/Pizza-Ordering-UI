@@ -12,9 +12,10 @@ import DeletePizza from "../../pages/deletepizza/DeletePizza";
 import EditPizza from "../../pages/editpizza/EditPizza";
 import axios from "axios";
 import Login from "../../pages/login/Login";
+import Profile from "../../pages/profile/Profile";
 
 // Set the base URL for all requests
-axios.defaults.baseURL = "https://localhost:44320";
+axios.defaults.baseURL = "https://localhost:7098";
 
 // Add an interceptor to attach the JWT token to the request headers
 // axios.interceptors.request.use(
@@ -77,6 +78,7 @@ const App = () => {
           <Route path="editpizza" element={<EditPizza pizza={pizza} />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
