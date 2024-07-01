@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 
 const AuthService = () => {
   const login = async (userName, password) => {
@@ -11,6 +10,7 @@ const AuthService = () => {
 
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
+        console.log(response.data);
       }
       return response.data;
     } catch (error) {
@@ -34,18 +34,11 @@ const AuthService = () => {
       console.log(error);
     }
   };
-  const getCurrentUser = () => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      return JSON.parse(user);
-    }
-    return null;
-  };
+
   return {
     login,
     logout,
     register,
-    getCurrentUser,
   };
 };
 
