@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const RegisterPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
     try {
-      await axios.post('https://localhost:7098/api/RegisterUser/SignUp', {
+      await axios.post("https://localhost:7098/api/RegisterUser/SignUp", {
         email,
         password,
       });

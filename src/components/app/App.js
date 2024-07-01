@@ -12,7 +12,7 @@ import DeletePizza from "../../pages/deletepizza/DeletePizza";
 import EditPizza from "../../pages/editpizza/EditPizza";
 import axios from "axios";
 import Login from "../../pages/login/Login";
-
+import Profile from "../../pages/profile/Profile";
 
 // Set the base URL for all requests
 axios.defaults.baseURL = "https://localhost:7098";
@@ -32,7 +32,7 @@ axios.defaults.baseURL = "https://localhost:7098";
 // );
 
 const App = () => {
-  let [pizza, setPizza] = useState([]);  
+  let [pizza, setPizza] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   //let [cart, setCart] = useState([]);
 
@@ -63,7 +63,6 @@ const App = () => {
   //     setPizza(res.data);
   //   });
   // }, []);
-  
 
   return (
     <div>
@@ -79,6 +78,7 @@ const App = () => {
           <Route path="editpizza" element={<EditPizza pizza={pizza} />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
