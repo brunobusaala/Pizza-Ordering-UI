@@ -13,8 +13,9 @@ const Cart = () => {
   useEffect(() => {
     fetchCart();
     Totalcost();
-    CartItemTotal();
-  }, []); // Fetch cart data when component mounts
+
+    // eslint-disable-next-line
+  }, []);
 
   // Retrieve the Jwt token from storage mechanism
   const user = JSON.parse(localStorage.getItem("user"));
@@ -23,14 +24,6 @@ const Cart = () => {
       Authorization: `Bearer ${user}`,
     },
   });
-
-  // function calculateTotalCost(cartData) {
-  //   let total = 0;
-  //   for (let i = 0; i < cartData.length; i++) {
-  //     total += cartData[i].Pizza.Price * cartData[i].Quantity;
-  //   }
-  //   return total;
-  // }
 
   const fetchCart = async () => {
     axiosInstance.get("/Api/Cart/GetCartById").then((response) => {
@@ -47,16 +40,17 @@ const Cart = () => {
       });
   };
 
-  const CartItemTotal = async (costId) => {
-    axiosInstance.get(`/Api/Cart/ItemTotal/${costId}`).then((response) => {
-      const alltotal = response.data.totalCost;
-      setItemTotal(alltotal);
-    });
-  };
+  // const CartItemTotal = async (costId) => {
+  //   axiosInstance.get(`/Api/Cart/ItemTotal/${costId}`).then((response) => {
+  //     const alltotal = response.data.totalCost;
+  //     setItemTotal(alltotal);
+  //   });
+  // };
 
   const handleDelete = (Id) => {
     axiosInstance.delete(`/Api/Cart/delete/${Id}`).then((response) => {
-      fetchCart(); // Re-fetch cart data after deletion
+      fetchCart();
+      Totalcost();
     });
   };
   return (
@@ -72,7 +66,6 @@ const Cart = () => {
         const { ItemId, Quantity, Pizza } = item;
         const { Name, Price, ImageName, Id } = Pizza || {}; // Destructure pizza properties
         let totalCost = Quantity * Pizza.Price;
-        CartItemTotal(Id);
 
         return (
           <>
@@ -83,7 +76,7 @@ const Cart = () => {
                   <h4>{Name}</h4>
                   <p>Quantity: {Quantity}</p>
                   <p>Price: {Price}</p>
-                  <p>Cost: Ksh: {itemTotal}</p>
+                  <p>Total Cost: Ksh: {totalCost}</p>
                   <button
                     className="btn btn-secondary"
                     onClick={() => handleDelete(Id)}
