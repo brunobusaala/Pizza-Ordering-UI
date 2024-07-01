@@ -1,6 +1,6 @@
 .pizza-card {
   display: grid;
-  grid-template-columns: repeat(6, 250px);
+  grid-template-columns: repeat(5, 250px);
   justify-content: center;
   gap: 20px;
 }
@@ -42,5 +42,5 @@
 }
 .submitdiv {
   height: 4vh;
-  margin: 2vh;
+ 
 }

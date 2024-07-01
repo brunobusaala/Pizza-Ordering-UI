@@ -66,7 +66,6 @@ const Login = (props) => {
               isInvalid={!!errors.userName} // Set the isInvalid prop based on the validation error
             />
             <Form.Control.Feedback type="invalid">
-              {" "}
               {errors.userName}
             </Form.Control.Feedback>
           </Form.Group>
