@@ -9,7 +9,7 @@ const DeletePizza = () => {
   let [status, setStatus] = useState([]);
   let navigate = useNavigate();
   useEffect(() => {
-    axios.get("https://localhost:44320/Api/Pizza").then((response) => {
+    axios.get("https://localhost:7098/Api/Pizza").then((response) => {
       setPizza(response.data);
     });
   }, [pizza]);
@@ -21,7 +21,7 @@ const DeletePizza = () => {
   const Delete = async (pizzas) => {
     let { id } = pizzas;
     try {
-      await axios.delete(`https://localhost:44320/Api/Pizza/DeletePizza${id}`);
+      await axios.delete(`https://localhost:7098/Api/Pizza/DeletePizza${id}`);
 
       setStatus("success");
       setTimeout(() => {
