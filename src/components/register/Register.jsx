@@ -7,7 +7,7 @@ const RegisterPage = () => {
 
   const handleRegister = async () => {
     try {
-      await axios.post("https://localhost:44320/api/RegisterUser/SignUp", {
+      await axios.post("https://localhost:7098/api/RegisterUser/SignUp", {
         email,
         password,
       });
