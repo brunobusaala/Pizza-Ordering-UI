@@ -23,7 +23,7 @@ const AddPizza = () => {
       },
     });
     try {
-      await axiosInstance.post(`https://localhost:44320/Api/Pizza/AddPizza`, {
+      await axiosInstance.post(`https://localhost:7098/Api/Pizza/AddPizza`, {
         name,
         sizeID,
         description,
