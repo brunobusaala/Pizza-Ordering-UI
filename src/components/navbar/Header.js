@@ -31,15 +31,9 @@ const Header = () => {
             <div className="nav-item">
               <Link to="/cart">Cart</Link>
             </div>
-            {/* <div className="nav-item">
-              <Link to="/contact">Contacts</Link>
-            </div> */}
-            {/* <div className="nav-item">
-              <Link to="/addpizza">Add</Link>
-            </div> */}
-            {/* <div className="nav-item">
-              <Link to="/deletepizza">Delete</Link>
-            </div> */}
+            <div className="nav-items">
+              <Link to="/profile">Profile</Link>
+            </div>
             <div className="nav-items">
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
