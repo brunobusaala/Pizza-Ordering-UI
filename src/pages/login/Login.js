@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -12,6 +12,13 @@ const Login = (props) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({}); // State to store validation errors
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrors({});
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [errors]);
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent form submission
@@ -47,7 +54,8 @@ const Login = (props) => {
       }
       return response.data;
     } catch (error) {
-      console.log(error);
+      setErrors({ invalidCredentials: "Problem occured while logging in..." });
+      console.log("Here", error);
     }
   };
 
@@ -56,6 +64,9 @@ const Login = (props) => {
       <div className="form">
         <h2 className="text-center">Login Page</h2>
         <Form>
+          <div className="text-center text-danger">
+            {errors.invalidCredentials}
+          </div>
           <Form.Group>
             <Form.Label className="mt-3">Enter Your UserName:</Form.Label>
             <Form.Control
