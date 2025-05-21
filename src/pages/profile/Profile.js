@@ -1,38 +1,57 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "../../services/api";
+import { Alert } from "react-bootstrap";
+import AuthService from "../../services/AuthService";
 
 const Profile = () => {
-  const [userMetaData, setUserMetaData] = useState("");
-
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  //Create a new instance of axios with custom headers
-  const axiosInstance = axios.create({
-    headers: {
-      Authorization: `Bearer ${user}`,
-    },
-  });
-
-  const getCurrentUser = () => {
-    const user = axiosInstance
-      .get("https://localhost:7098/api/token/GetUserMetaData")
-      .then((response) => {
-        setUserMetaData(response.data);
-      });
-    return user;
-  };
+  const [userMetaData, setUserMetaData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getCurrentUser();
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/api/token/GetUserMetaData");
+        setUserMetaData(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+        setError("Failed to load user profile. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // eslint-disable-next-line
+    if (AuthService.isAuthenticated()) {
+      fetchUserData();
+    } else {
+      setError("You need to login to view your profile");
+      setLoading(false);
+    }
   }, []);
 
+  if (loading) return <div>Loading profile...</div>;
+
+  if (error) return <Alert variant="danger">{error}</Alert>;
+
   return (
-    <div>
-      <h1>User Profile</h1>
-      <p>Username: {userMetaData?.userName}</p>
-      <p>Email: {userMetaData?.email}</p>
+    <div className="container mt-5">
+      <div className="card p-4">
+        <h1>User Profile</h1>
+        {userMetaData ? (
+          <div>
+            <p>
+              <strong>Username:</strong> {userMetaData.userName}
+            </p>
+            <p>
+              <strong>Email:</strong> {userMetaData.email}
+            </p>
+          </div>
+        ) : (
+          <p>No profile data available</p>
+        )}
+      </div>
     </div>
   );
 };

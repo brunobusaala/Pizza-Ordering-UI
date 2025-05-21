@@ -1,20 +1,25 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import AuthService from "../../services/AuthService";
 
-const Login = (props) => {
+const Login = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [errors, setErrors] = useState({}); // State to store validation errors
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
+
+    // Reset errors and message
+    setErrors({});
+    setMessage("");
 
     // Validate the form fields
     const validationErrors = {};
@@ -31,23 +36,21 @@ const Login = (props) => {
       return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await axios.post("/api/token/Login", {
-        userName,
-        password,
-        rememberMe,
-      });
-
-      if (response.data) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-
-        navigate("/"); //Redirect to home page
-      } else {
-        setErrors({ invalidCredentials: "Invalid Credentials" });
-      }
-      return response.data;
+      await AuthService.login(userName, password);
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      setMessage(resMessage || "Invalid credentials. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -55,6 +58,7 @@ const Login = (props) => {
     <div className="my-form">
       <div className="form">
         <h2 className="text-center">Login Page</h2>
+        {message && <Alert variant="danger">{message}</Alert>}
         <Form>
           <Form.Group>
             <Form.Label className="mt-3">Enter Your UserName:</Form.Label>
@@ -63,7 +67,7 @@ const Login = (props) => {
               placeholder="Enter your userName"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              isInvalid={!!errors.userName} // Set the isInvalid prop based on the validation error
+              isInvalid={!!errors.userName}
             />
             <Form.Control.Feedback type="invalid">
               {errors.userName}
@@ -79,10 +83,9 @@ const Login = (props) => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              isInvalid={!!errors.password} // Set the isInvalid prop based on the validation error
+              isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">
-              {" "}
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
@@ -95,8 +98,12 @@ const Login = (props) => {
             />
           </Form.Group>
 
-          <Button className="btn btn-primary" onClick={handleLogin}>
-            Login
+          <Button
+            className="btn btn-primary"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Login"}
           </Button>
         </Form>
       </div>
