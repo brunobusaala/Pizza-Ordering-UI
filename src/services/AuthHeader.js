@@ -1,8 +1,10 @@
+import AuthService from "./AuthService";
+
 export default function AuthHeader() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = AuthService.getCurrentUser();
 
   if (user && user.token) {
-    return { Authorization: "Bearer " + user.token };
+    return { Authorization: `Bearer ${user.token}` };
   } else {
     return {};
   }

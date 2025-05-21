@@ -1,58 +1,92 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import App from "../../components/app/App";
-
+import api from "../../services/api";
 import "./Cart.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Alert, Spinner } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import AuthService from "../../services/AuthService";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
-  const [cartCalculations, setCartCalculations] = useState(0); // Initialize to 0
-  const [itemTotal, setItemTotal] = useState(0);
+  const [cartCalculations, setCartCalculations] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actionInProgress, setActionInProgress] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!AuthService.isAuthenticated()) {
+      navigate("/login");
+      return;
+    }
+
     fetchCart();
-    Totalcost();
-
-    // eslint-disable-next-line
-  }, []);
-
-  // Retrieve the Jwt token from storage mechanism
-  const user = JSON.parse(localStorage.getItem("user"));
-  const axiosInstance = axios.create({
-    headers: {
-      Authorization: `Bearer ${user}`,
-    },
-  });
+    calculateTotalCost();
+  }, [navigate]);
 
   const fetchCart = async () => {
-    axiosInstance.get("/Api/Cart/GetCartById").then((response) => {
-      const cartItem = response.data.CartItems.$values;
-      setCart(cartItem);
-    });
-  };
-  const Totalcost = async () => {
-    axiosInstance
-      .get("/Api/Cart/CalculateCartCalculations")
-      .then((response) => {
-        const alltotal = response.data.totalCost;
-        setCartCalculations(alltotal);
-      });
+    try {
+      setLoading(true);
+      const response = await api.get("/Api/Cart/GetCartById");
+      if (
+        response.data &&
+        response.data.CartItems &&
+        response.data.CartItems.$values
+      ) {
+        setCart(response.data.CartItems.$values);
+      } else {
+        setCart([]);
+      }
+      setError(null);
+    } catch (err) {
+      console.error("Failed to fetch cart:", err);
+      setError("Failed to load your cart. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // const CartItemTotal = async (costId) => {
-  //   axiosInstance.get(`/Api/Cart/ItemTotal/${costId}`).then((response) => {
-  //     const alltotal = response.data.totalCost;
-  //     setItemTotal(alltotal);
-  //   });
-  // };
-
-  const handleDelete = (Id) => {
-    axiosInstance.delete(`/Api/Cart/delete/${Id}`).then((response) => {
-      fetchCart();
-      Totalcost();
-    });
+  const calculateTotalCost = async () => {
+    try {
+      const response = await api.get("/Api/Cart/CalculateCartCalculations");
+      if (response.data && response.data.totalCost) {
+        setCartCalculations(response.data.totalCost);
+      } else {
+        setCartCalculations(0);
+      }
+    } catch (err) {
+      console.error("Failed to calculate cart total:", err);
+    }
   };
+
+  const handleDelete = async (Id) => {
+    try {
+      setActionInProgress(true);
+      await api.delete(`/Api/Cart/delete/${Id}`);
+      await fetchCart();
+      await calculateTotalCost();
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+      setError("Failed to delete item. Please try again.");
+    } finally {
+      setActionInProgress(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center mt-5">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <Alert variant="danger">{error}</Alert>;
+  }
+
   return (
     <div className="cartItems">
       <h2 className="mb-6 text-center"> Shopping Cart Details</h2>
@@ -80,8 +114,9 @@ const Cart = () => {
                   <button
                     className="btn btn-secondary"
                     onClick={() => handleDelete(Id)}
+                    disabled={actionInProgress} // Disable button when action is in progress
                   >
-                    Remove
+                    {actionInProgress ? "Removing..." : "Remove"}
                   </button>
                 </div>
               </div>

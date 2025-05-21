@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Header.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import AuthService from "../../services/AuthService";
 
 const Header = () => {
   const location = useLocation();
-
-  //Retrieve the Jwt token from storage mechanism
-  const user = JSON.parse(localStorage.getItem("user"));
-  const isLoggedIn = JSON.parse(localStorage.getItem("user")) !== null;
+  const navigate = useNavigate();
+  const isLoggedIn = AuthService.isAuthenticated();
+  const currentUser = AuthService.getCurrentUser();
 
   const handleLogout = () => {
-    // Clear the token from localStorage
-    localStorage.removeItem("user");
-    // Perform any necessary action after logout
-    // For example, redirect to the login page
-    window.location.href = "/login";
+    AuthService.logout();
+    navigate("/login");
   };
+
+  useEffect(() => {
+    console.log("Current user:", currentUser);
+    console.log("Is logged in:", currentUser?.userName);
+  }, [currentUser, isLoggedIn, location.pathname]);
 
   return (
     <nav className="navbar">
@@ -26,7 +28,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="nav-items align-items-center">
-        {isLoggedIn ? (
+        {currentUser ? (
           <>
             <div className="nav-item">
               <Link to="/cart">Cart</Link>
@@ -34,6 +36,16 @@ const Header = () => {
             <div className="nav-items">
               <Link to="/profile">Profile</Link>
             </div>
+            {currentUser && (
+              <>
+                <div className="nav-items">
+                  <Link to="/addpizza">Add Pizza</Link>
+                </div>
+                <div className="nav-items">
+                  <Link to="/deletepizza">Manage Pizzas</Link>
+                </div>
+              </>
+            )}
             <div className="nav-items">
               <button className="logout-btn" onClick={handleLogout}>
                 Logout

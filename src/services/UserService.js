@@ -1,22 +1,20 @@
-import axios from "axios";
-import React from "react";
-import AuthHeader from "./AuthHeader";
+import api from "./api";
 
 const UserService = {
   getPublicContent: () => {
-    return axios.get("all");
+    return api.get("/all");
   },
 
   getUserBoard: () => {
-    return axios.get("user", { headers: AuthHeader() });
+    return api.get("/user");
   },
 
   getModeratorBoard: () => {
-    return axios.get("mod", { headers: AuthHeader() });
+    return api.get("/mod");
   },
 
   getAdminBoard: () => {
-    return axios.get("admin", { headers: AuthHeader() });
+    return api.get("/admin");
   },
 };
 

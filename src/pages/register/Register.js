@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import AuthService from "../../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUserName] = useState("");
@@ -10,13 +11,15 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitStatus, setSubmitStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Empty dependency array to ensure the effect is only triggered once
     // after the initial component render
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = {};
@@ -45,29 +48,19 @@ const Register = () => {
       return;
     }
 
-    // Perform API call
-    axios
-      .post("/api/token/Register", {
-        username,
-        email,
-        password,
-        confirmPassword,
-      })
-      .then((response) => {
-        // Handle the response
-        setSubmitStatus("Registration successful!");
-        setTimeout(() => {
-          setSubmitStatus("");
-        }, 3000);
-      })
-      .catch((error) => {
-        // Handle the error
-        console.log("Registration error:", error);
-        setSubmitStatus("Registration error!");
-        setTimeout(() => {
-          setSubmitStatus("");
-        }, 3000);
-      });
+    setLoading(true);
+
+    try {
+      await AuthService.register(username, email, password);
+      setSubmitStatus("Registration successful! Please login.");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      console.error("Registration error:", error);
+      setSubmitStatus("Registration failed. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,10 +68,15 @@ const Register = () => {
       <div className="form">
         <Form onSubmit={handleSubmit}>
           <h1 className="text-center">Register</h1>
-          <div className="text-center">
-            {" "}
-            <p className="text-success">{submitStatus}</p>
-          </div>
+          {submitStatus && (
+            <Alert
+              variant={
+                submitStatus.includes("successful") ? "success" : "danger"
+              }
+            >
+              {submitStatus}
+            </Alert>
+          )}
           <Form.Group className="mb-20">
             <Form.Label>Enter Username:</Form.Label>
             <Form.Control
@@ -134,8 +132,8 @@ const Register = () => {
               {errors.confirmPassword}
             </Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Register
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? "Processing..." : "Register"}
           </Button>
         </Form>
       </div>
