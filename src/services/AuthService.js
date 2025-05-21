@@ -1,45 +1,51 @@
 import axios from "axios";
 
-const AuthService = () => {
-  const login = async (userName, password) => {
+const API_URL = "https://localhost:7098";
+
+const AuthService = {
+  login: async (userName, password) => {
     try {
-      const response = await axios.post("/api/Login", {
+      const response = await axios.post(`${API_URL}/api/token/login`, {
         userName,
         password,
       });
-
-      if (response.data.token) {
+      if (response) {
         localStorage.setItem("user", JSON.stringify(response.data));
-        console.log(response.data);
+        console.log("Login successful:", response.data);
       }
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error("Login error:", error);
+      throw error;
     }
-  };
+  },
 
-  const logout = () => {
+  logout: () => {
     localStorage.removeItem("user");
-  };
+  },
 
-  const register = async (userName, emailAddress, password) => {
+  register: async (userName, emailAddress, password) => {
     try {
-      const response = await axios.post("/api/RegisterUser/SignUp", {
+      const response = await axios.post(`${API_URL}/api/RegisterUser/SignUp`, {
         userName,
         emailAddress,
         password,
       });
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error("Registration error:", error);
+      throw error;
     }
-  };
+  },
 
-  return {
-    login,
-    logout,
-    register,
-  };
+  getCurrentUser: () => {
+    return JSON.parse(localStorage.getItem("user"));
+  },
+
+  isAuthenticated: () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return !!user && !!user.token;
+  },
 };
 
 export default AuthService;
